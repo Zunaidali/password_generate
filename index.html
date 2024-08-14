@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+</head>
+<body>
+    <h1>Password Generator</h1>
+    <div id="passwordDisplay"></div>
+
+    <script>
+        class Password {
+            constructor(length) {
+                this.length = length;
+                this.lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+                this.uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                this.digitChars = '0123456789';
+                this.specialChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+            }
+
+            generate() {
+                // Ensure at least one of each required character type is included
+                let password = '';
+                password += this.getRandomCharacter(this.lowercaseChars);
+                password += this.getRandomCharacter(this.uppercaseChars);
+                password += this.getRandomCharacter(this.digitChars);
+                password += this.getRandomCharacter(this.specialChars);
+
+                // Fill the rest of the password length with random characters
+                const allChars = this.lowercaseChars + this.uppercaseChars + this.digitChars + this.specialChars;
+                for (let i = password.length; i < this.length; i++) {
+                    password += this.getRandomCharacter(allChars);
+                }
+
+                // Shuffle the password to ensure randomness
+                password = this.shufflePassword(password);
+
+                return password;
+            }
+
+            getRandomCharacter(characters) {
+                const index = Math.floor(Math.random() * characters.length);
+                return characters[index];
+            }
+
+            shufflePassword(password) {
+                const array = password.split('');
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+                }
+                return array.join('');
+            }
+        }
+
+        // Example usage:
+        const passwordLength = 12;
+        const myPassword = new Password(passwordLength);
+        document.getElementById('passwordDisplay').innerText = "Generated Password: " + myPassword.generate();
+    </script>
+</body>
+</html>
